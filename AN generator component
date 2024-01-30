@@ -1,0 +1,142 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 18.12.2023 08:58:45
+-- Design Name: 
+-- Module Name: AN_generator - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity generator_An is
+       Port (   clk        : in  std_logic; --100mhz --AN counter
+                rst        : in  std_logic; 
+--                unit       : in std_logic_vector(3 downto 0);  --Controlleur
+--                Ten        : in std_logic_vector(3 downto 0);
+--                hundred    : in std_logic_vector(3 downto 0);
+--                Thousand   : in std_logic_vector(3 downto 0);
+--                unit2      : in std_logic_vector(3 downto 0);
+--                Ten2       : in std_logic_vector(3 downto 0);
+--                hundred2   : in std_logic_vector(3 downto 0);
+--                Thousand2  : in std_logic_vector(3 downto 0);
+  --              dp_vector  : in std_logic_vector(7 downto 0);
+                AN         : out std_logic_vector(7 downto 0);
+                dp         : out std_logic;                      --BCD                                                 
+                BCD        : out std_logic_vector(6 downto 0));
+end generator_An;
+
+architecture Structural of generator_An is
+-- component
+------------------------------------------------------------------------------
+component  controller is
+  Port (    unit       : in std_logic_vector(3 downto 0);
+            Ten        : in std_logic_vector(3 downto 0);
+            hundred    : in std_logic_vector(3 downto 0);
+            Thousand   : in std_logic_vector(3 downto 0);
+            unit2      : in std_logic_vector(3 downto 0);
+            Ten2       : in std_logic_vector(3 downto 0);
+            hundred2   : in std_logic_vector(3 downto 0);
+            Thousand2  : in std_logic_vector(3 downto 0);
+            dp_vector  : in std_logic_vector(7 downto 0);
+            AN         : in std_logic_vector(7 downto 0);
+            data       : out std_logic_vector(3 downto 0);
+            dp_int     : out std_logic);
+end component;
+
+component bcd_7seg is
+     Port ( data   : in std_logic_vector(3 downto 0);
+            dp_int : in std_logic;
+            dp     : out std_logic;
+            BCD    : out std_logic_vector(6 downto 0));
+end component;
+
+component an_gen is
+  Port ( clk : in STD_LOGIC;
+           rst : in STD_LOGIC;
+           AN : out STD_LOGIC_VECTOR(7 downto 0)); 
+           
+end component;
+
+
+------------------------------------------------------------------------------
+--signals
+------------------------------------------------------------------------------
+signal An_test       : std_logic_vector (7 downto 0);  --An_contol
+signal data_test     : std_logic_vector (3 downto 0);
+signal dp_int_test   : std_logic;
+
+signal unit_int      : std_logic_vector (3 downto 0);
+signal ten_int       : std_logic_vector (3 downto 0);
+signal hundred_int   : std_logic_vector (3 downto 0);
+signal thousand_int  : std_logic_vector (3 downto 0);
+--------
+signal unit2_int     : std_logic_vector (3 downto 0);
+signal ten2_int      : std_logic_vector (3 downto 0);
+signal hundred2_int  : std_logic_vector (3 downto 0);
+signal thousand2_int : std_logic_vector (3 downto 0);
+signal dp_vector_int : std_logic_vector (7 downto 0);
+ 
+------------------------------------------------------------------------------
+begin
+
+unit_int<="0000";
+ten_int<="0001";
+hundred_int<="0010";
+thousand_int<="0011";
+-------
+unit2_int<="0100";
+ten2_int<="0101";
+hundred2_int<="0110";
+thousand2_int<="0111";
+dp_vector_int<="11111110";
+
+AN<=AN_test;
+An_contol: controller
+Port map ( unit           =>       unit_int,
+           ten            =>       ten_int,
+           hundred        =>       hundred_int,
+           thousand       =>       thousand_int,
+           unit2          =>       unit2_int ,
+           ten2           =>       ten2_int,
+           hundred2       =>       hundred2_int,
+           thousand2      =>       thousand2_int,
+           dp_vector      =>       dp_vector_int,
+           AN             =>       AN_test ,
+           data           =>       data_test ,
+           dp_int         =>       dp_int_test );
+
+bcd_7_seg_controller: bcd_7seg
+
+Port map ( data           =>       data_test,
+           dp_int         =>       dp_int_test,
+           dp             =>       dp,
+           BCD            =>       BCD);
+           
+           
+ANgenerator: an_gen   
+Port map ( rst           =>       rst,
+           clk           =>       clk,
+           AN            =>       AN_test );
+
+end Structural;
