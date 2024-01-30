@@ -1,0 +1,67 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 14.12.2023 08:37:33
+-- Design Name: 
+-- Module Name: clock_divider - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity clock_divider is
+        Port ( rst      : in std_logic;
+               clk      : in std_logic;
+               clk_1khz : out std_logic);
+end clock_divider;
+
+architecture Behavioral of clock_divider is
+
+signal count: integer range 0 to 1000000;   --div by 100000 for 1khz for 100mhz clk
+signal tmp : std_logic;  -- it will be toggled whenn we reach the required frequency(1khz)
+
+
+begin
+
+process(clk,rst)
+begin
+
+if(rst='1') then
+        count<=1; --here we have a freq of 50MHZ (frequency =f/2)
+        tmp<='0';
+elsif(rising_edge(clk)) then
+
+        if(count >= 100000) then -- we need to stop the count at 50000 as we reach the reuired frequency (1khz)
+            tmp <= '1';   --when count reaches this limit, we stop to count
+            count <= 0;
+        else 
+            tmp <='0';  --pulse to go down after rising and start counting
+            count <=count+1;
+        end if;
+end if;
+end process;
+
+clk_1khz <= tmp;
+
+
+end Behavioral;
