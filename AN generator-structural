@@ -1,0 +1,82 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 18.12.2023 11:21:16
+-- Design Name: 
+-- Module Name: an_gen - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity an_gen is
+    Port ( clk : in STD_LOGIC;
+           rst : in STD_LOGIC;
+           AN  : out STD_LOGIC_VECTOR(7 downto 0));
+end an_gen;
+
+architecture Structural of an_gen is
+component  clock_divider 
+        Port ( rst      : in std_logic;
+               clk      : in std_logic;
+               clk_1khz : out std_logic);
+end component;
+
+component  counter is
+  Port (   clk      : in  std_logic; --100mhz
+           rst      : in  std_logic;
+           clk_1khz : in  std_logic;
+           AN       : out std_logic_vector(7 downto 0)); 
+           
+end component;
+
+--signal rst_int       : std_logic;
+--signal clk_int       : std_logic;
+signal clk_1khz_int  : std_logic;
+--signal An_test       : std_logic_vector (7 downto 0);
+
+begin
+
+--clk<= clk_int;
+--rst<= rst_int;
+--AN<=An_test;
+
+ANgen: clock_divider
+
+Port map ( clk            =>       clk,
+           rst            =>       rst,
+           clk_1khz       =>       clk_1khz_int);
+
+ANcount: counter
+
+Port map ( clk            =>       clk,
+           rst            =>       rst,
+           clk_1khz       =>       clk_1khz_int,
+           AN             =>       an );           
+           
+
+end Structural;
+
+
