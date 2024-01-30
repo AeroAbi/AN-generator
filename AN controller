@@ -1,0 +1,86 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 13.12.2023 16:39:14
+-- Design Name: 
+-- Module Name: controller - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+use IEEE.NUMERIC_STD.ALL;
+
+
+
+entity controller is
+  Port (    unit       : in std_logic_vector(3 downto 0);
+            Ten        : in std_logic_vector(3 downto 0);
+            hundred    : in std_logic_vector(3 downto 0);
+            Thousand   : in std_logic_vector(3 downto 0);
+            unit2      : in std_logic_vector(3 downto 0);
+            Ten2       : in std_logic_vector(3 downto 0);
+            hundred2   : in std_logic_vector(3 downto 0);
+            Thousand2  : in std_logic_vector(3 downto 0);
+            dp_vector  : in std_logic_vector(7 downto 0);
+            AN         : in std_logic_vector(7 downto 0);
+            data       : out std_logic_vector(3 downto 0);
+            dp_int     : out std_logic);
+end controller;
+
+architecture Behavioral of controller is
+
+begin
+
+process(unit,Ten,hundred,Thousand,unit2,Ten2,hundred2,Thousand2,dp_vector,AN)
+begin
+
+case (AN) is    --AN configurations
+      when "11111110" =>
+         data <=unit;  --unit
+         dp_int <= dp_vector(0);  --dp_int o/p wired to dp_vector i/p
+      when "11111101" =>
+        data <=Ten;   --ten
+        dp_int <= dp_vector(1);
+      when "11111011" =>
+         data <=hundred;  --hundred
+         dp_int <= dp_vector(2);
+
+      when "11110111" =>
+        data <=Thousand;   ---thousand
+        dp_int <= dp_vector(3);
+      when "11101111" =>
+        data <= unit2;
+        dp_int <= dp_vector(4);
+      when "11011111" =>
+         data <=Ten2;
+         dp_int <= dp_vector(5);
+      when "10111111" =>
+         data <=hundred2;
+         dp_int <= dp_vector(6);
+      when "01111111" =>
+         data <=Thousand2;
+         dp_int <= dp_vector(7);
+        when others =>
+         data <="0000";  --for all conditions other than mentioned , display all zeroes which means that all the 7 segments are going to be on
+
+
+  end case;
+end process;
+
+end Behavioral;
