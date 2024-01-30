@@ -1,0 +1,75 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 11.12.2023 08:27:42
+-- Design Name: 
+-- Module Name: Counter - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity counter is
+  Port (   clk      : in  std_logic; --100mhz
+           rst      : in  std_logic;
+           clk_1khz : in  std_logic;
+           AN       : out std_logic_vector(7 downto 0)); 
+           
+end counter; -- we added the inputs and outputs of the counter/ in other words we initialized the counter
+
+architecture Behavioral of counter is
+
+signal An_gen: std_logic_vector(7 downto 0);
+
+begin
+
+  process(clk,rst)
+  begin
+
+      if rst='1' then
+        An_gen<="11111110";
+      elsif rising_edge(clk) then
+         if clk_1khz='1' then 
+            case An_gen is 
+                when "11111110" => An_gen<="11111101";
+                when "11111101" => An_gen<="11111011";
+                when "11111011" => An_gen<="11110111";
+                when "11110111" => An_gen<="11101111";
+                when "11101111" => An_gen<="11011111";
+                when "11011111" => An_gen<="10111111";
+                when "10111111" => An_gen<="01111111";
+                when "01111111" => An_gen<="11111110";
+                when others     => An_gen<="11111101";
+             end case;   
+         else
+                An_gen<=An_gen;
+         end if;
+     end if;         
+ 
+  end process;
+
+
+AN<=An_gen;
+end Behavioral;
