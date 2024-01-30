@@ -1,0 +1,76 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 13.12.2023 11:00:05
+-- Design Name: 
+-- Module Name: bcd_7seg - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+use IEEE.NUMERIC_STD.ALL;
+
+
+
+
+-- BCD = a b c d e f g
+entity bcd_7seg is
+     Port ( data   : in std_logic_vector(3 downto 0);
+            dp_int : in std_logic;
+            dp     : out std_logic;
+            BCD    : out std_logic_vector(6 downto 0));
+end bcd_7seg;
+
+architecture Behavioral of bcd_7seg is
+begin
+
+process(data)
+begin
+
+--if data ="0000" then bcd <= "0000001"
+case (data) is
+      when "0000" =>
+         BCD <="0000001";
+      when "0001" =>
+        BCD <="1001111";
+      when "0010" =>
+         BCD <="0010010";
+      when "0011" =>
+        BCD <="0000110";
+      when "0100" =>
+        BCD <= "1001100";
+      when "0101" =>
+         BCD <="0100100";
+      when "0110" =>
+         BCD <="0100000";
+      when "0111" =>
+         BCD <="0001111";
+      when "1000" =>
+         BCD <="0000000";
+      when "1001" =>
+         BCD <="0000100";
+        when others =>
+         BCD <="1111111";
+
+
+  end case;
+end process;
+
+dp<=dp_int; --datapointer wired to dp
+				     
+
+end Behavioral;
